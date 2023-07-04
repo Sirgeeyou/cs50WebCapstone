@@ -52,20 +52,26 @@ export const Login = () => {
   console.log(errors);
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-top h-screen  mt-5">
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="text"
           placeholder="Username"
+          className="input w-full max-w-xs bg-sky-950"
           {...register("username")}
           onChange={(e) => {
             setNewUsername(e.target.value);
           }}
         />
         <p>{errors.username?.message}</p>
-        <input type="text" placeholder="PassWord" {...register("password")} />
+        <input
+          type="password"
+          placeholder="Password"
+          className="input w-full max-w-xs bg-sky-950 mt-2"
+          {...register("password")}
+        />
         <p>{errors.password?.message}</p>
-        <input type="submit" />
+        <button className="btn mt-2  bg-sky-950">Submit</button>
       </form>
     </div>
   );

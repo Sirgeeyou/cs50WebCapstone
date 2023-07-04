@@ -39,22 +39,37 @@ export const Register = () => {
   };
   /* {...register } is giving an object with the key as the name inside the "" */
   return (
-    <div>
+    <div className="flex flex-col items-center justify-top h-screen mt-20">
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" placeholder="Username" {...register("username")} />
-        <p>{errors.username?.message}</p>
-        <input type="text" placeholder="Email" {...register("email")} />
         <input
+          type="text"
+          placeholder="Username"
+          className="input w-full max-w-xs bg-sky-950"
+          {...register("username")}
+        />
+
+        <p>{errors.username?.message}</p>
+        <input
+          type="text"
+          placeholder="Email"
+          className="input w-full max-w-xs mt-2 bg-sky-950"
+          {...register("email")}
+        />
+        <p>{errors.email?.message}</p>
+        <input
+          className="input w-full max-w-xs mt-2 bg-sky-950"
           type="password"
           placeholder="Password"
           {...register("password")}
         />
+        <p>{errors.password?.message}</p>
         <input
+          className="input w-full max-w-xs mt-2 bg-sky-950"
           type="password"
           placeholder="Confirm Password"
           {...register("confirmPassword")}
         />
-        <input type="submit" />
+        <button className="btn mt-2  bg-sky-950">Submit</button>
       </form>
     </div>
   );

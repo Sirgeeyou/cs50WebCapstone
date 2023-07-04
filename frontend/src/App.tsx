@@ -6,9 +6,12 @@ import { Register } from "./pages/Register";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { Login } from "./pages/Login";
-import { Logout } from "./pages/Logout";
+import { Logout } from "./components/Logout";
 import { Provider } from "react-redux";
 import { store } from "./pages/store";
+import { HotelsFeed } from "./pages/HotelsFeed";
+import { HotelDetails } from "./pages/HotelDetails";
+import { useParams } from "react-router-dom";
 
 function App() {
   const queryClient = new QueryClient();
@@ -23,6 +26,9 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="/hotels" element={<HotelsFeed />} />
+              <Route path="/hotels/:hotelId" element={<HotelDetails />} />
             </Routes>
           </Provider>
         </Router>
