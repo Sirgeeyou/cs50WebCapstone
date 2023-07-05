@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const fetchData = async () => {
   const options = {
@@ -28,7 +28,7 @@ const fetchData = async () => {
       star_rating_ids: "3,4,5",
     },
     headers: {
-      "X-RapidAPI-Key": "d23f859a7fmsh65d57e62c22ee7fp150a77jsnd3afc540a378",
+      "X-RapidAPI-Key": "ee576aa15dmsh3581ca25f23d503p10277bjsn714e9abfa151",
       "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
     },
   };
@@ -36,6 +36,7 @@ const fetchData = async () => {
   try {
     const response = await Axios.request(options);
     console.log(response.data);
+    console.log("HotelsFeed");
     return response.data;
   } catch (error) {
     console.error(error);
@@ -43,9 +44,12 @@ const fetchData = async () => {
 };
 
 export const HotelsFeed = () => {
-  const { data, isLoading, error } = useQuery(["hotels"], fetchData);
-
   const navigate = useNavigate();
+
+  const { data, isLoading, error } = useQuery(["hotels"], fetchData, {
+    staleTime: Infinity,
+  });
+
   if (isLoading) {
     return <div>Loading...</div>;
   }

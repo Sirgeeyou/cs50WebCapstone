@@ -1,4 +1,3 @@
-import React from "react";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Home } from "./pages/Home";
@@ -11,7 +10,6 @@ import { Provider } from "react-redux";
 import { store } from "./pages/store";
 import { HotelsFeed } from "./pages/HotelsFeed";
 import { HotelDetails } from "./pages/HotelDetails";
-import { useParams } from "react-router-dom";
 
 function App() {
   const queryClient = new QueryClient();
