@@ -22,8 +22,9 @@ export const useFetchData = (hotelId: string | undefined) => {
       };
 
       try {
-        const response = await axios.request(options);
+        const response = await axios.request({ ...options, timeout: 500 });
         console.log(response.data);
+        console.log("useFetchData");
         setData(response.data);
       } catch (error) {
         console.error(error);
