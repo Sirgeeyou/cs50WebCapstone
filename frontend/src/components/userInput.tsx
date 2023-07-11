@@ -12,10 +12,12 @@ const UserInput: React.FC<UserInputProps> = ({ onFormSubmit }) => {
 
   const handleCheckInDateChange = (date: Date | null) => {
     setCheckInDate(date);
+    console.log("SETCHEKCINDATE: ", date);
   };
 
   const handleCheckOutDateChange = (date: Date | null) => {
     setCheckOutDate(date);
+    console.log("SETCHECKOUTDATE: ", date);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

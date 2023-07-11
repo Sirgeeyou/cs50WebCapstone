@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Hotels } from "../components/Hotels";
 import UserInput from "../components/userInput";
+import { SearchBar } from "../components/SearchBar";
 
 export const HotelsFeed = () => {
   const [selectedDates, setSelectedDates] = useState<{
@@ -29,6 +30,7 @@ export const HotelsFeed = () => {
   return (
     <div>
       <UserInput onFormSubmit={onFormSubmit} />
+      <SearchBar />
       <Hotels
         checkin_date={selectedDates.checkInDate}
         checkout_date={selectedDates.checkOutDate}

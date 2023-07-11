@@ -1,4 +1,4 @@
-import Axios from "axios";
+import axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -8,7 +8,10 @@ interface HotelProps {
   checkout_date: string | null;
 }
 
-const fetchData = async ({ checkin_date, checkout_date }: HotelProps) => {
+const fetchData = async (
+  { checkin_date, checkout_date }: HotelProps,
+  cancelToken: CancelTokenSource
+) => {
   const presetDay = new Date();
   console.log("fetchData: ", checkin_date, checkout_date);
   const options = {
@@ -16,6 +19,7 @@ const fetchData = async ({ checkin_date, checkout_date }: HotelProps) => {
     url: "https://hotels-com-provider.p.rapidapi.com/v2/hotels/search",
     params: {
       domain: "AE",
+      query: "dubai",
       sort_order: "REVIEW",
       locale: "en_GB",
       checkout_date: checkout_date || presetDay.toISOString().split("T")[0],
@@ -41,7 +45,7 @@ const fetchData = async ({ checkin_date, checkout_date }: HotelProps) => {
   };
 
   try {
-    const response = await Axios.request(options);
+    const response = await axios.request(options);
     console.log(response.data);
     console.log("HotelsFeed");
     return response.data;
@@ -60,21 +64,9 @@ export const Hotels: React.FC<HotelProps> = ({
 
   const { data, isLoading, error } = useQuery(
     ["hotels", checkin_date, checkout_date], // Include checkin_date and checkout_date as part of the query key
-    () => fetchData({ checkin_date, checkout_date }),
-    {
-      staleTime: Infinity,
-    }
+    () => fetchData({ checkin_date, checkout_date }, axios.CancelToken.source())
   );
 
-  useEffect(() => {
-    if (checkin_date && checkout_date) {
-      const fetchDataAndRefetch = async () => {
-        await fetchData({ checkin_date, checkout_date });
-        queryClient.refetchQueries(["hotels", checkin_date, checkout_date]); // Update the query key for refetchQueries
-      };
-      fetchDataAndRefetch();
-    }
-  }, [queryClient, checkin_date, checkout_date]);
   if (!data || isLoading) {
     return <div>Loading...</div>;
   }
