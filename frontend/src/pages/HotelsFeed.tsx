@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Hotels } from "../components/Hotels";
 import UserInput from "../components/userInput";
-import { addDays } from "date-fns";
 
 export const HotelsFeed = () => {
+  const todayDate = new Date();
+
   const [selectedDates, setSelectedDates] = useState<{
     checkInDate: string | null;
     checkOutDate: string | null;
   }>({
-    checkInDate: null,
-    checkOutDate: null,
+    checkInDate: todayDate.toISOString().split("T")[0] || null,
+    checkOutDate: todayDate.toISOString().split("T")[0] || null,
   });
 
   const [gaiaId, setGaiaId] = useState<string>("2734");
