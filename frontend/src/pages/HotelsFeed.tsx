@@ -4,22 +4,15 @@ import UserInput from "../components/userInput";
 import { addDays } from "date-fns";
 
 export const HotelsFeed = () => {
-  let presentDay = new Date();
-  const presentDayString = presentDay.toISOString().split("T")[0];
-
-  let nextDay = new Date();
-  const adjustedNextDay = addDays(nextDay, 1);
-  const nextDayString = adjustedNextDay.toISOString().split("T")[0];
-
   const [selectedDates, setSelectedDates] = useState<{
     checkInDate: string | null;
     checkOutDate: string | null;
   }>({
-    checkInDate: presentDayString,
-    checkOutDate: nextDayString,
+    checkInDate: null,
+    checkOutDate: null,
   });
 
-  const [gaiaId, setGaiaId] = useState<string>("151");
+  const [gaiaId, setGaiaId] = useState<string>("2734");
 
   const handleGaiaIdChange = (id: string) => {
     setGaiaId(id);
@@ -45,7 +38,6 @@ export const HotelsFeed = () => {
       <UserInput
         onFormSubmit={onFormSubmit}
         onGaiaIdChange={handleGaiaIdChange}
-        presentDay={presentDayString}
       />
 
       <Hotels

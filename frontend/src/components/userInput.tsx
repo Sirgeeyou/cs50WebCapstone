@@ -7,13 +7,11 @@ import { format, addDays } from "date-fns";
 interface UserInputProps {
   onFormSubmit: (checkInDate: Date | null, checkOutDate: Date | null) => void;
   onGaiaIdChange: (gaiaId: string) => void;
-  presentDay: string;
 }
 
 const UserInput: React.FC<UserInputProps> = ({
   onFormSubmit,
   onGaiaIdChange,
-  presentDay,
 }) => {
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
@@ -54,11 +52,6 @@ const UserInput: React.FC<UserInputProps> = ({
     console.log("SETGAIAID: ", id); // optional logging
   };
 
-  const presentDayDate = new Date(presentDay);
-  console.log("presentDayDate: ", presentDayDate);
-  const adjustedPresentDayDate = addDays(presentDayDate, 1);
-  console.log("adjustedPresentDayDate: ", adjustedPresentDayDate);
-
   return (
     <div className="max-w-xs mx-auto">
       <SearchBar onGaiaIdChange={handleGaiaIdChange} />
@@ -77,7 +70,7 @@ const UserInput: React.FC<UserInputProps> = ({
               selected={checkInDate}
               onChange={handleCheckInDateChange}
               showTimeSelect={false}
-              minDate={presentDayDate}
+              minDate={checkInDate}
               dateFormat="yyyy-MM-dd"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
             />
@@ -94,7 +87,7 @@ const UserInput: React.FC<UserInputProps> = ({
               selected={checkOutDate}
               onChange={handleCheckOutDateChange}
               showTimeSelect={false}
-              minDate={adjustedPresentDayDate}
+              minDate={checkInDate}
               dateFormat="yyyy-MM-dd"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
             />
