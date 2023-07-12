@@ -1,31 +1,29 @@
 import axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 interface HotelProps {
   checkin_date: string | null;
   checkout_date: string | null;
+  gaiaId: string | null;
 }
 
 const fetchData = async (
-  { checkin_date, checkout_date }: HotelProps,
+  { checkin_date, checkout_date, gaiaId }: HotelProps,
   cancelToken: CancelTokenSource
 ) => {
-  const presetDay = new Date();
   console.log("fetchData: ", checkin_date, checkout_date);
   const options = {
     method: "GET",
     url: "https://hotels-com-provider.p.rapidapi.com/v2/hotels/search",
     params: {
       domain: "AE",
-      query: "dubai",
       sort_order: "REVIEW",
       locale: "en_GB",
-      checkout_date: checkout_date || presetDay.toISOString().split("T")[0],
-      region_id: "2872",
+      checkout_date: checkout_date,
+      region_id: `${gaiaId}`,
       adults_number: "1",
-      checkin_date: checkin_date || presetDay.toISOString().split("T")[0],
+      checkin_date: checkin_date,
       available_filter: "SHOW_AVAI LABLE_ONLY",
       meal_plan: "FREE_BREAKFAST",
       guest_rating_min: "8",
@@ -39,11 +37,11 @@ const fetchData = async (
       star_rating_ids: "3,4,5",
     },
     headers: {
-      "X-RapidAPI-Key": "ee576aa15dmsh3581ca25f23d503p10277bjsn714e9abfa151",
+      "X-RapidAPI-Key": "62cabb5bcbmsh6123884a8061d20p162ea3jsnbeedb0dd41fb",
       "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
     },
   };
-
+  console.log("options: ", options);
   try {
     const response = await axios.request(options);
     console.log(response.data);
@@ -51,20 +49,26 @@ const fetchData = async (
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
 
 export const Hotels: React.FC<HotelProps> = ({
   checkin_date,
   checkout_date,
+  gaiaId,
 }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   console.log("HotelsFeed: ", checkin_date, checkout_date);
 
   const { data, isLoading, error } = useQuery(
-    ["hotels", checkin_date, checkout_date], // Include checkin_date and checkout_date as part of the query key
-    () => fetchData({ checkin_date, checkout_date }, axios.CancelToken.source())
+    ["hotels", checkin_date, checkout_date, gaiaId], // Include checkin_date and checkout_date as part of the query key
+    () =>
+      fetchData(
+        { checkin_date, checkout_date, gaiaId },
+        axios.CancelToken.source()
+      )
   );
 
   if (!data || isLoading) {
