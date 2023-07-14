@@ -28,7 +28,7 @@ const Images: React.FC<ImagesProps> = ({ images }) => {
           </div>
           <div className="grid grid-cols-2 gap-4">
             {images &&
-              images.slice(1, 5).map((image: Image) => (
+              images.slice(1, 5).map((image: Image, key: any) => (
                 <div className="w-48 h-60">
                   <img
                     src={image?.url}

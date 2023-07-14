@@ -17,7 +17,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onGaiaIdChange }) => {
   };
 
   useEffect(() => {
-    console.log("Country:", country);
+    console.log("City:", country);
 
     const fetchRegion = async (
       country: string,
@@ -75,7 +75,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onGaiaIdChange }) => {
         onChange={handleInputChange}
         value={country}
         type="text"
-        placeholder="Search for a country"
+        placeholder="Search for a city"
         className="input w-full max-w-xs text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
       />
     </div>

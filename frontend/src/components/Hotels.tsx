@@ -1,6 +1,7 @@
 import axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface HotelProps {
   checkin_date: string | null;
@@ -62,8 +63,10 @@ export const Hotels: React.FC<HotelProps> = ({
   const queryClient = useQueryClient();
   console.log("HotelsFeed: ", checkin_date, checkout_date);
 
+  const [sortByPrice, setSortByPrice] = useState<"asc" | "desc" | "">(() => "");
+
   const { data, isLoading, error } = useQuery(
-    ["hotels", checkin_date, checkout_date, gaiaId], // Include checkin_date and checkout_date as part of the query key
+    ["hotels", checkin_date, checkout_date, gaiaId],
     () =>
       fetchData(
         { checkin_date, checkout_date, gaiaId },
@@ -75,12 +78,31 @@ export const Hotels: React.FC<HotelProps> = ({
     return <div>Loading...</div>;
   }
 
-  // Use the fetched data here
-  console.log(data);
-  console.log("checkInDate, checkOutDate: ", checkin_date, checkout_date);
+  const handlePrice = () => {
+    setSortByPrice((prevSort) => {
+      if (prevSort === "asc") return "desc";
+      if (prevSort === "desc") return "asc";
+      return "asc"; // Default to ascending order
+    });
+  };
+
+  const sortedHotels = [...(data?.properties || [])].sort((a, b) => {
+    if (sortByPrice === "asc") {
+      return a.price.lead.amount - b.price.lead.amount;
+    } else if (sortByPrice === "desc") {
+      return b.price.lead.amount - a.price.lead.amount;
+    } else {
+      return 0;
+    }
+  });
+
   return (
-    <div className="flex flex-wrap justify-center ">
-      {data?.properties?.map((hotel: any, key: any) => (
+    <div className="flex flex-wrap justify-center">
+      <button onClick={handlePrice} className="btn btn-primary mt-3 mx-auto">
+        Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
+      </button>
+
+      {sortedHotels?.map((hotel: any, key: any) => (
         <div key={key} className="w-96 mx-2">
           <div className="card shadow-xl mt-5">
             <figure className="flex justify-center rounded-t-lg overflow-hidden">
@@ -90,14 +112,31 @@ export const Hotels: React.FC<HotelProps> = ({
                 className="card-image rounded-t-lg w-full h-auto"
               />
             </figure>
-            <div className="card-body  rounded-lg bg-slate-800">
+            <div className="card-body rounded-lg bg-slate-800">
               <h2 className="card-title text-light">{hotel.name}</h2>
-              <p className="text-light">
-                If a dog chews shoes, whose shoes does he choose?
-              </p>
-              <div className="card-actions justify-end">
+              <div className="flex">
+                {hotel.offerSummary?.messages?.map((message: any, key: any) => (
+                  <div
+                    key={key}
+                    className={`badge ${
+                      key === 0
+                        ? "badge-primary"
+                        : key === 1
+                        ? "badge-secondary"
+                        : ""
+                    } flex items-center ${key === 1 ? "ml-2" : ""}`}
+                  >
+                    {message.message}
+                  </div>
+                ))}
+              </div>
+
+              <div className="card-actions justify-end ">
+                <p className="text-light mt-3.5 ml-0.5 font-bold">
+                  ${hotel.price.lead.amount.toFixed(0)}/night
+                </p>
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary "
                   onClick={() => navigate(`/hotels/${hotel.id}`)}
                 >
                   Visit now

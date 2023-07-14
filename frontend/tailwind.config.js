@@ -6,7 +6,11 @@ module.exports = {
     "node_modules/react-daisyui/dist/**/*.js",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ["Inter var", "sans-serif"],
+      },
+    },
   },
   plugins: [require("daisyui")],
   daisyui: {

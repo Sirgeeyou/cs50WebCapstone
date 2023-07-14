@@ -70,7 +70,7 @@ const UserInput: React.FC<UserInputProps> = ({
               selected={checkInDate}
               onChange={handleCheckInDateChange}
               showTimeSelect={false}
-              minDate={checkInDate}
+              minDate={new Date()}
               dateFormat="yyyy-MM-dd"
               className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
             />
