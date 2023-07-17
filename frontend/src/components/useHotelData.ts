@@ -13,7 +13,7 @@ interface Summary {
       longitude: number;
     };
   };
-  tagLine: string;
+  tagline: string;
 }
 
 interface HotelData {
@@ -23,7 +23,7 @@ interface HotelData {
   summary: Summary;
 }
 
-const fetchImages = async (hotelId: string | undefined) => {
+const fetchData = async (hotelId: string | undefined) => {
   const options = {
     method: "GET",
     url: "https://hotels-com-provider.p.rapidapi.com/v2/hotels/details",
@@ -41,10 +41,6 @@ const fetchImages = async (hotelId: string | undefined) => {
   try {
     const response = await axios.request<HotelData>(options);
     console.log("response.data: ", response.data);
-    console.log(
-      "response.data.propertyGallery.images: ",
-      response.data.propertyGallery.images[0].image.url
-    );
     return response.data;
   } catch (error) {
     console.error(error);
@@ -53,8 +49,13 @@ const fetchImages = async (hotelId: string | undefined) => {
 };
 
 const useHotelData = (hotelId: string | undefined) => {
-  return useQuery<HotelData, Error>(["hotelData", hotelId], async () =>
-    fetchImages(hotelId)
+  return useQuery<HotelData, Error>(
+    ["hotelData", hotelId],
+    async () => fetchData(hotelId),
+    {
+      staleTime: 1000 * 60 * 5 * 60, // Data is considered fresh for 5 minutes (adjust as needed)
+      refetchOnWindowFocus: false, // Disable refetch on window focus
+    }
   );
 };
 

@@ -18,14 +18,15 @@ export const HotelDetails: React.FC = () => {
   }
 
   const images = data?.propertyGallery.images;
+  const tagLine = data?.summary.tagline;
 
   return (
     <div>
       <div>
-        <Images images={images} />
+        <HotelHeader tagLine={tagLine} />
       </div>
       <div>
-        <HotelHeader />
+        <Images images={images} />
       </div>
     </div>
   );

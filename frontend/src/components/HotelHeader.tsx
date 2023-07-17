@@ -1,11 +1,15 @@
 import React from "react";
 
-export const HotelHeader: React.FC = () => {
+interface HotelHeaderProps {
+  tagLine: string;
+}
+
+export const HotelHeader: React.FC<HotelHeaderProps> = ({ tagLine }) => {
   return (
     <div className="container mx-auto pt-8">
-      <div className="flex justify-start items-start">
-        <div className="flex flex-wrap justify-center ml-60">
-          <p className="text-2xl font-bold ml-1.5">tagline</p>
+      <div className="flex justify-center items-center">
+        <div className="flex flex-wrap justify-center">
+          <p className="text-2xl font-bold">{tagLine}</p>
         </div>
       </div>
     </div>
