@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import Images from "../components/Images";
 import React from "react";
 import useHotelImages from "../components/useHotelImages";
+import { HotelHeader } from "../components/HotelHeader";
 
 export const HotelDetails: React.FC = () => {
   const { hotelId } = useParams<{ hotelId: string }>();
@@ -10,7 +11,12 @@ export const HotelDetails: React.FC = () => {
 
   return (
     <div>
-      <Images images={images} />
+      <div>
+        <Images images={images} />
+      </div>
+      <div>
+        <HotelHeader />
+      </div>
     </div>
   );
 };

@@ -34,6 +34,7 @@ export const HotelsFeed = () => {
   };
   console.log("HotelsFeed selectedDates: ", selectedDates);
   console.log("HotelsFeed gaiaId: ", gaiaId);
+
   return (
     <div>
       <UserInput

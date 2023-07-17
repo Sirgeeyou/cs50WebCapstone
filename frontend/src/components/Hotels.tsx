@@ -98,9 +98,11 @@ export const Hotels: React.FC<HotelProps> = ({
 
   return (
     <div className="flex flex-wrap justify-center">
-      <button onClick={handlePrice} className="btn btn-primary mt-3 mx-auto">
-        Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
-      </button>
+      <div className="flex flex-wrap">
+        <button onClick={handlePrice} className="btn btn-primary mt-3 mx-auto">
+          Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
+        </button>
+      </div>
 
       {sortedHotels?.map((hotel: any, key: any) => (
         <div key={key} className="w-96 mx-2">

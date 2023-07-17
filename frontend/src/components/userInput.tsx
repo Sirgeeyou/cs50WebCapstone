@@ -52,6 +52,12 @@ const UserInput: React.FC<UserInputProps> = ({
     console.log("SETGAIAID: ", id); // optional logging
   };
 
+
+
+
+
+
+  
   return (
     <div className="max-w-xs mx-auto">
       <SearchBar onGaiaIdChange={handleGaiaIdChange} />
