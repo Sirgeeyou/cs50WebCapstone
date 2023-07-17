@@ -1,4 +1,6 @@
-export const HotelHeader = () => {
+import React from "react";
+
+export const HotelHeader: React.FC = () => {
   return (
     <div className="container mx-auto pt-8">
       <div className="flex justify-start items-start">

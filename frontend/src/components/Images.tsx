@@ -1,9 +1,11 @@
 import React from "react";
 
-interface Image {
-  url: string | undefined;
-  accessibilityText: string;
-  imageId: string;
+export interface Image {
+  image: {
+    url: string | undefined;
+    accessibilityText: string;
+    imageId: string;
+  };
 }
 
 interface ImagesProps {
@@ -21,8 +23,8 @@ const Images: React.FC<ImagesProps> = ({ images }) => {
         <div className="flex flex-wrap justify-center">
           <div className="w-96 h-120 mr-1.5">
             <img
-              src={images && images[0]?.url}
-              alt={images && images[0]?.accessibilityText}
+              src={images && images[0]?.image.url}
+              alt={images && images[0]?.image.accessibilityText}
               className="w-full h-full object-cover"
             />
           </div>
@@ -31,9 +33,9 @@ const Images: React.FC<ImagesProps> = ({ images }) => {
               images.slice(1, 5).map((image: Image, key: any) => (
                 <div className="w-48 h-60">
                   <img
-                    src={image?.url}
-                    alt={image?.accessibilityText}
-                    key={image?.imageId}
+                    src={image?.image.url}
+                    alt={image?.image.accessibilityText}
+                    key={image?.image.imageId}
                     className="w-full h-full object-cover"
                   />
                 </div>
