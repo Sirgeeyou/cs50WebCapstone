@@ -2,7 +2,13 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { Image } from "./Images";
 
-interface Summary {
+export interface HotelData {
+  propertyGallery: {
+    images: Image[];
+  };
+  summary: Summary;
+}
+export interface Summary {
   location: {
     address: {
       adressLine: string;
@@ -14,13 +20,31 @@ interface Summary {
     };
   };
   tagline: string;
+  amenities: {
+    amenities: PropertyInfoSection[];
+  };
 }
 
-interface HotelData {
-  propertyGallery: {
-    images: Image[];
-  };
-  summary: Summary;
+export interface AmenitiesProp {
+  amenities: PropertyInfoSection[];
+}
+
+export interface PropertyInfoSection {
+  title: string;
+  contents: PropertyInfoContent[];
+}
+
+export interface PropertyInfoContent {
+  header: LodgingHeader;
+  items: PropertyInfoItem[];
+}
+
+export interface LodgingHeader {
+  text: string;
+}
+
+interface PropertyInfoItem {
+  text: string;
 }
 
 const fetchData = async (hotelId: string | undefined) => {
@@ -41,6 +65,7 @@ const fetchData = async (hotelId: string | undefined) => {
   try {
     const response = await axios.request<HotelData>(options);
     console.log("response.data: ", response.data);
+    console.log("AMENITIES: ", response.data.summary.amenities);
     return response.data;
   } catch (error) {
     console.error(error);
