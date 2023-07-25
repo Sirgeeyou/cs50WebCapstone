@@ -3,10 +3,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { SearchBar } from "./SearchBar";
 import { format, addDays } from "date-fns";
+import AdultsForm from "./Adults";
 
 interface UserInputProps {
   onFormSubmit: (checkInDate: Date | null, checkOutDate: Date | null) => void;
   onGaiaIdChange: (gaiaId: string) => void;
+  onAdultsChange: (num: number) => void;
 }
 
 const UserInput: React.FC<UserInputProps> = ({
@@ -15,6 +17,7 @@ const UserInput: React.FC<UserInputProps> = ({
 }) => {
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
+  const [numAdults, setNumAdults] = useState(1);
 
   const handleCheckInDateChange = (date: Date | null) => {
     setCheckInDate(date);
@@ -24,6 +27,11 @@ const UserInput: React.FC<UserInputProps> = ({
   const handleCheckOutDateChange = (date: Date | null) => {
     setCheckOutDate(date);
     console.log("SETCHECKOUTDATE: ", date);
+  };
+
+  const handleAdultsChange = (num: number) => {
+    setNumAdults(num);
+    console.log("Number of Adults: ", num);
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -52,15 +60,13 @@ const UserInput: React.FC<UserInputProps> = ({
     console.log("SETGAIAID: ", id); // optional logging
   };
 
-
-
-
-
-
-  
   return (
     <div className="max-w-xs mx-auto">
       <SearchBar onGaiaIdChange={handleGaiaIdChange} />
+      <div className="container mx-auto mt-8">
+        <h1 className="text-2xl font-bold mb-4">Select Number of Adults</h1>
+        <AdultsForm numAdults={numAdults} onAdultsChange={handleAdultsChange} />
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex space-x-4">
@@ -99,6 +105,7 @@ const UserInput: React.FC<UserInputProps> = ({
             />
           </div>
         </div>
+
         <button
           type="submit"
           className="w-full px-4 py-2 text-white bg-indigo-500 rounded-md hover:bg-indigo-600"

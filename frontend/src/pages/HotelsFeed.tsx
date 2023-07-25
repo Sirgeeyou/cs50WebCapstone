@@ -5,6 +5,12 @@ import UserInput from "../components/userInput";
 export const HotelsFeed = () => {
   const todayDate = new Date();
 
+  const [numAdults, setNumAdults] = useState<number>(1);
+
+  const handleNumAdultsChange = (num: number) => {
+    setNumAdults(num);
+    console.log("handleNumAdultsChange: ", num);
+  };
   const [selectedDates, setSelectedDates] = useState<{
     checkInDate: string | null;
     checkOutDate: string | null;
@@ -40,12 +46,14 @@ export const HotelsFeed = () => {
       <UserInput
         onFormSubmit={onFormSubmit}
         onGaiaIdChange={handleGaiaIdChange}
+        onAdultsChange={handleNumAdultsChange}
       />
 
       <Hotels
         checkin_date={selectedDates.checkInDate}
         checkout_date={selectedDates.checkOutDate}
         gaiaId={gaiaId}
+        numAdults={numAdults.toString()}
       />
     </div>
   );

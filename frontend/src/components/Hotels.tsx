@@ -2,15 +2,18 @@ import axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface HotelProps {
   checkin_date: string | null;
   checkout_date: string | null;
   gaiaId: string | null;
+  numAdults: string;
 }
 
 const fetchData = async (
-  { checkin_date, checkout_date, gaiaId }: HotelProps,
+  { checkin_date, checkout_date, gaiaId, numAdults }: HotelProps,
   cancelToken: CancelTokenSource
 ) => {
   console.log("fetchData: ", checkin_date, checkout_date);
@@ -23,7 +26,7 @@ const fetchData = async (
       locale: "en_GB",
       checkout_date: checkout_date,
       region_id: `${gaiaId}`,
-      adults_number: "1",
+      adults_number: numAdults,
       checkin_date: checkin_date,
       available_filter: "SHOW_AVAI LABLE_ONLY",
       meal_plan: "FREE_BREAKFAST",
@@ -58,6 +61,7 @@ export const Hotels: React.FC<HotelProps> = ({
   checkin_date,
   checkout_date,
   gaiaId,
+  numAdults,
 }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -66,10 +70,10 @@ export const Hotels: React.FC<HotelProps> = ({
   const [sortByPrice, setSortByPrice] = useState<"asc" | "desc" | "">(() => "");
 
   const { data, isLoading, error } = useQuery(
-    ["hotels", checkin_date, checkout_date, gaiaId],
+    ["hotels", checkin_date, checkout_date, gaiaId, numAdults],
     () =>
       fetchData(
-        { checkin_date, checkout_date, gaiaId },
+        { checkin_date, checkout_date, gaiaId, numAdults },
         axios.CancelToken.source()
       )
   );
@@ -110,10 +114,22 @@ export const Hotels: React.FC<HotelProps> = ({
             <figure className="flex justify-center rounded-t-lg overflow-hidden">
               <img
                 src={hotel.propertyImage.image.url}
-                alt="Shoes"
                 className="card-image rounded-t-lg w-full h-auto"
               />
+              <div className="absolute top-1 right-1 bg-blue-500 px-2 py-1 text-white rounded-lg flex items-center space-x-1 mr-2">
+                <div
+                  className="tooltip"
+                  data-tip={`Reviews: ${hotel.reviews?.total}`}
+                >
+                  <span className="mr-1">
+                    <FontAwesomeIcon icon={faStar} />
+                  </span>
+
+                  {hotel.reviews?.score}
+                </div>
+              </div>
             </figure>
+
             <div className="card-body rounded-lg bg-slate-800">
               <h2 className="card-title text-light">{hotel.name}</h2>
               <div className="flex">
@@ -132,7 +148,7 @@ export const Hotels: React.FC<HotelProps> = ({
                   </div>
                 ))}
               </div>
-
+              ]
               <div className="card-actions justify-end ">
                 <p className="text-light mt-3.5 ml-0.5 font-bold">
                   ${hotel.price.lead.amount.toFixed(0)}/night
