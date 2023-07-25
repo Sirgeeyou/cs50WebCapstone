@@ -5,6 +5,7 @@ import useHotelData from "../components/useHotelData";
 import { HotelHeader } from "../components/HotelHeader";
 import { Map } from "../components/Map";
 import { Amenities } from "../components/Amenities";
+import { Modal } from "../components/Modal";
 
 export const HotelDetails: React.FC = () => {
   const { hotelId } = useParams<{ hotelId: string }>();
@@ -23,6 +24,7 @@ export const HotelDetails: React.FC = () => {
   const tagLine = data?.summary.tagline;
   const coordinates = data?.summary.location.coordinates;
   const amenities = data?.summary.amenities.amenities;
+  console.log(data?.summary.amenities.amenities[0].contents[0].items[0].text);
   console.log("DATA: ", data);
   console.log("HotelDetails amenities", amenities);
 
@@ -33,7 +35,9 @@ export const HotelDetails: React.FC = () => {
       </div>
       <div>
         <Images images={images} />
+        <Modal images={images} />
       </div>
+      <div className="divider mt-5 mb-5"></div>
       <div>
         <Amenities amenities={amenities} />
       </div>

@@ -6,3 +6,8 @@
   height: 200px; /* Set the desired height */
   object-fit: cover; /* Adjust the image's aspect ratio */
 }
+
+.container {
+  margin: 0 auto; /* To center the container */
+  max-width: 1200px; /* Set the maximum width for both components */
+}

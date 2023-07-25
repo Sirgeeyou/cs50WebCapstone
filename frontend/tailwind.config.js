@@ -16,4 +16,9 @@ module.exports = {
   daisyui: {
     themes: ["light", "dark", "cupcake"],
   },
+  variants: {
+    extend: {
+      boxShadow: ["hover", "focus"],
+    },
+  },
 };
