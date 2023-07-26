@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, FavoriteHotel
 from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
@@ -11,13 +11,21 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
-    def create(self, validated_data):
-        username = validated_data.get('username')
-        password = validated_data.get('password')
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
 
-        # Authenticate user
         user = authenticate(username=username, password=password)
         if not user:
-            raise serializers.ValidationError('Invalid username and/or password.')
+            raise serializers.ValidationError('Invalid credentials')
 
-        return user
+        return user  # Return the authenticated user
+
+    def create(self, validated_data):
+        pass 
+    
+class HotelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= FavoriteHotel
+        fields = ['id', 'hotelName', 'imgUrl']
+

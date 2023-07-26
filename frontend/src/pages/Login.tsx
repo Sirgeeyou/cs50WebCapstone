@@ -41,6 +41,7 @@ export const Login = () => {
       .then((res) => {
         if (res.data.success) {
           dispatch(login({ success: true, username: res.data.username }));
+          localStorage.setItem("loggedInUser", JSON.stringify(res.data));
         }
       })
       .catch((error) => {

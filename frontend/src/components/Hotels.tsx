@@ -1,4 +1,4 @@
-import axios, { CancelTokenSource } from "axios";
+import Axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -12,6 +12,15 @@ import {
 } from "../pages/store";
 import { useDispatch } from "react-redux";
 
+interface HotelApiResponse {
+  id: string;
+  name: string;
+  propertyImage: {
+    image: {
+      url: string;
+    };
+  };
+}
 export interface HotelProps {
   checkin_date: string | null;
   checkout_date: string | null;
@@ -54,7 +63,7 @@ const fetchData = async (
   };
   console.log("options: ", options);
   try {
-    const response = await axios.request(options);
+    const response = await Axios.request(options);
     console.log(response.data);
     console.log("HotelsFeed");
     return response.data;
@@ -81,13 +90,13 @@ export const Hotels: React.FC<HotelProps> = ({
     () =>
       fetchData(
         { checkin_date, checkout_date, gaiaId, numAdults },
-        axios.CancelToken.source()
+        Axios.CancelToken.source()
       )
   );
 
   //Redux toolkit
   const [newHotel, setNewHotel] = useState<HotelStateDetails>({
-    id: "",
+    hotelId: "",
     hotelName: "",
     imgUrl: "",
   });
@@ -118,6 +127,28 @@ export const Hotels: React.FC<HotelProps> = ({
     }
   });
 
+  const onSubmit = (data: HotelApiResponse) => {
+    const {
+      id: hotelId,
+      name: hotelName,
+      propertyImage: {
+        image: { url: imgUrl },
+      },
+    } = data;
+    console.log("DATA: ", data);
+    const hotelDataToSend = { hotelId, hotelName, imgUrl };
+    console.log("hotelDataToSend: ", hotelDataToSend);
+    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelDataToSend)
+      .then((res) => {
+        if (res.data.success) {
+          dispatch(addFavorites(newHotel));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div className="flex flex-wrap justify-center">
       <div className="flex flex-wrap">
@@ -135,7 +166,7 @@ export const Hotels: React.FC<HotelProps> = ({
                 className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
                 onClick={() => {
                   setNewHotel(hotel);
-                  dispatch(addFavorites(newHotel));
+                  onSubmit(hotel);
                 }}
               />
               <img

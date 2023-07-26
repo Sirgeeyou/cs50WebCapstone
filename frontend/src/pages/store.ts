@@ -3,7 +3,7 @@ import { create } from "domain";
 /* you can create reducers in another folder for oragnization */
 
 export interface HotelStateDetails {
-  id: string;
+  hotelId: string;
   hotelName: string;
   imgUrl: string;
 }
@@ -33,7 +33,7 @@ const hotelSlice = createSlice({
     },
     removeFavorites: (state, action: PayloadAction<string>) => {
       state.value.hotels = state.value.hotels.filter(
-        (hotel) => hotel.id !== action.payload
+        (hotel) => hotel.hotelId !== action.payload
       ); // Remove the hotel with the specified id from the hotels array
     },
   },
