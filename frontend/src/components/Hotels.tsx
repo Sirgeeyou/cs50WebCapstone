@@ -5,6 +5,8 @@ import { useState } from "react";
 import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addFavorites, removeFavorites } from "../pages/store";
+import { useDispatch } from "react-redux";
 
 export interface HotelProps {
   checkin_date: string | null;
@@ -79,6 +81,13 @@ export const Hotels: React.FC<HotelProps> = ({
       )
   );
 
+  //Redux toolkit
+  const [newHotel, setNewHotel] = useState<any>({});
+
+  const dispatch = useDispatch();
+
+  console.log("newHotel: ", newHotel);
+
   if (!data || isLoading) {
     return <div>Loading...</div>;
   }
@@ -117,7 +126,8 @@ export const Hotels: React.FC<HotelProps> = ({
                 icon={faHeartOutline}
                 className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
                 onClick={() => {
-                  navigate("/favorites");
+                  setNewHotel(hotel);
+                  dispatch(addFavorites(newHotel));
                 }}
               />
               <img

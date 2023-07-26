@@ -26,6 +26,9 @@ export const Navbar = () => {
                   <Link to="/"> Home </Link>
                 </li>
                 <li className="text-xl">
+                  <Link to="/favorites"> Favorites </Link>
+                </li>
+                <li className="text-xl">
                   <Link to="/register"> Register </Link>
                 </li>
                 <li className="text-xl">
