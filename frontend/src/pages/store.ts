@@ -2,14 +2,14 @@ import { PayloadAction, configureStore, createSlice } from "@reduxjs/toolkit";
 import { create } from "domain";
 /* you can create reducers in another folder for oragnization */
 
-interface HotelStateDetails {
+export interface HotelStateDetails {
   id: string;
   hotelName: string;
   imgUrl: string;
 }
 
 interface HotelStateValue {
-  hotels: HotelStateDetails;
+  hotels: HotelStateDetails[];
 }
 
 interface HotelState {
@@ -18,13 +18,9 @@ interface HotelState {
 
 const initialState = { value: { username: "" }, isLogged: false };
 
-const initialStateHotel = {
+const initialStateHotel: HotelState = {
   value: {
-    hotels: {
-      id: "",
-      hotelName: "",
-      imgUrl: "",
-    },
+    hotels: [],
   },
 } as HotelState;
 
@@ -32,14 +28,13 @@ const hotelSlice = createSlice({
   name: "hotel",
   initialState: initialStateHotel,
   reducers: {
-    addFavorites: (
-      state: HotelState,
-      action: PayloadAction<HotelStateValue>
-    ) => {
-      state.value = action.payload;
+    addFavorites: (state, action: PayloadAction<HotelStateDetails>) => {
+      state.value.hotels.push(action.payload); // Add the new hotel to the hotels array
     },
-    removeFavorites: (state) => {
-      state = initialStateHotel;
+    removeFavorites: (state, action: PayloadAction<string>) => {
+      state.value.hotels = state.value.hotels.filter(
+        (hotel) => hotel.id !== action.payload
+      ); // Remove the hotel with the specified id from the hotels array
     },
   },
 });

@@ -5,7 +5,11 @@ import { useState } from "react";
 import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { addFavorites, removeFavorites } from "../pages/store";
+import {
+  HotelStateDetails,
+  addFavorites,
+  removeFavorites,
+} from "../pages/store";
 import { useDispatch } from "react-redux";
 
 export interface HotelProps {
@@ -82,7 +86,11 @@ export const Hotels: React.FC<HotelProps> = ({
   );
 
   //Redux toolkit
-  const [newHotel, setNewHotel] = useState<any>({});
+  const [newHotel, setNewHotel] = useState<HotelStateDetails>({
+    id: "",
+    hotelName: "",
+    imgUrl: "",
+  });
 
   const dispatch = useDispatch();
 
