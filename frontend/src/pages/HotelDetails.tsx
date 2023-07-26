@@ -41,10 +41,10 @@ export const HotelDetails: React.FC = () => {
       <div>
         <Amenities amenities={amenities} />
       </div>
-      {/*<div className=`1"container mx-auto px-24 mt-4">
+      {/* <div className="container mx-auto px-24 mt-4">
         <p className="font-mono text-xl mb-4 mt-10">Where you'll be</p>
         <Map coordinates={coordinates} />
-      </div>*/}
+      </div> */}
     </div>
   );
 };

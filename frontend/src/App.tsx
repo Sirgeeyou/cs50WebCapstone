@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import { store } from "./pages/store";
 import { HotelsFeed } from "./pages/HotelsFeed";
 import { HotelDetails } from "./pages/HotelDetails";
+import { Favorites } from "./pages/Favorites";
 
 function App() {
   const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ function App() {
               <Route path="/logout" element={<Logout />} />
               <Route path="/hotels" element={<HotelsFeed />} />
               <Route path="/hotels/:hotelId" element={<HotelDetails />} />
+              <Route path="/favorites" element={<Favorites />} />
             </Routes>
           </Provider>
         </Router>

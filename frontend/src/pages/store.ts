@@ -1,7 +1,23 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { create } from "domain";
 /* you can create reducers in another folder for oragnization */
 
 const initialState = { value: { username: "" }, isLogged: false };
+
+const hotelSlice = createSlice({
+  name: "hotel",
+  initialState: {
+    value: {
+      hotels: {
+        hotelName: "",
+        imgUrl: "",
+      },
+    },
+  },
+  reducers: {
+    addFavorites: (state, action) => {},
+  },
+});
 
 const userSlice = createSlice({
   name: "user" /* this is the name of the slice */,

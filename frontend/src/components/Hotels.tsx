@@ -2,10 +2,11 @@ import axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-interface HotelProps {
+export interface HotelProps {
   checkin_date: string | null;
   checkout_date: string | null;
   gaiaId: string | null;
@@ -112,6 +113,13 @@ export const Hotels: React.FC<HotelProps> = ({
         <div key={key} className="w-96 mx-2">
           <div className="card shadow-xl mt-5">
             <figure className="flex justify-center rounded-t-lg overflow-hidden">
+              <FontAwesomeIcon
+                icon={faHeartOutline}
+                className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
+                onClick={() => {
+                  navigate("/favorites");
+                }}
+              />
               <img
                 src={hotel.propertyImage.image.url}
                 className="card-image rounded-t-lg w-full h-auto"
@@ -148,7 +156,7 @@ export const Hotels: React.FC<HotelProps> = ({
                   </div>
                 ))}
               </div>
-              ]
+
               <div className="card-actions justify-end ">
                 <p className="text-light mt-3.5 ml-0.5 font-bold">
                   ${hotel.price.lead.amount.toFixed(0)}/night
