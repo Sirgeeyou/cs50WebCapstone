@@ -41,6 +41,7 @@ export const Login = () => {
       .then((res) => {
         if (res.data.success) {
           setNewUsername(res.data.username);
+
           dispatch(setJwtToken(res.data.jwtToken));
           dispatch(
             login({

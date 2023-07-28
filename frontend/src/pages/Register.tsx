@@ -45,7 +45,14 @@ export const Register = () => {
       // Check if registration was successful
       if (response.data.message === "Registration successful.") {
         // Store the user ID in localStorage
-        localStorage.setItem("jwtToken", response.data.jwtToken);
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify({
+            username: response.data.username,
+            jwtToken: response.data.jwtToken,
+            user_id: response.data.user_id,
+          })
+        );
 
         dispatch(setJwtToken(response.data.jwtToken));
         dispatch(

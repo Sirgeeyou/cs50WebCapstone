@@ -13,4 +13,4 @@ class FavoriteHotel(models.Model):
     imgUrl = models.URLField()
 
     def __str__(self):
-        return f"{self.user.username} - {self.hotel_name}"
+        return f"{self.user.username} - {self.hotelName}"

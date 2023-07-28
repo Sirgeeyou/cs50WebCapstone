@@ -151,12 +151,25 @@ export const Hotels: React.FC<HotelProps> = ({
     console.log("hotelDataToSend: ", hotelDataToSend);
 
     const jwtToken = getTokenFromLocalStorage();
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    const user_id = loggedInUser ? JSON.parse(loggedInUser)?.user_id : null;
+    console.log("user_id: ", user_id);
+    if (!user_id) {
+      console.log("User ID not found. Please make sure the user is logged in.");
+      return;
+    }
+
+    const hotelDataWithUserId = {
+      ...hotelDataToSend,
+      user_id: user_id,
+    };
 
     const headers = {
       Authorization: `Bearer ${jwtToken}`,
     };
-
-    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelDataToSend, {
+    console.log("headers: ", headers);
+    console.log("hotelDataWithUserId: ", hotelDataWithUserId);
+    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelDataWithUserId, {
       headers: headers,
     })
       .then((res) => {

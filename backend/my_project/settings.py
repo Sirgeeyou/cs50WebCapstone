@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,9 +26,6 @@ SECRET_KEY = 'django-insecure-c))rn^3)f(njo5^p%e6*9wsw38v52l^f(-1c6p7ar$f$!rll-k
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-CORS_ALLOW_CREDENTIALS = True
-# Application definition
 
 
 
@@ -106,6 +103,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':('rest_framework_simplejwt.authentication.JWTAuthentication',)
 }
 
+CORS_ALLOW_CREDENTIALS = True
+# Application definition
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000"
+]
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -124,7 +128,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
+}
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

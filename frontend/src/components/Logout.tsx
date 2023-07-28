@@ -13,7 +13,8 @@ export const Logout = () => {
       const response = await Axios.post(endpoint);
       console.log("Logout successful: ", response.data);
       // Perform any additional actions after successful logout, e.g., redirecting to the login page
-      localStorage.removeItem("loggedInUser");
+      localStorage.clear();
+
       dispatch(logout());
       navigate("/login");
     } catch (error) {
