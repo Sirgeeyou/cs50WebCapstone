@@ -1,32 +1,32 @@
 from django.http import JsonResponse, HttpResponse
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.db import IntegrityError
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.response import Response
-from rest_framework import status
 from .models import User
 from .serializers import LoginSerializer, HotelSerializer
-from rest_framework.renderers import JSONRenderer
 from rest_framework.decorators import api_view
 import json
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
-
-from rest_framework.renderers import JSONRenderer
-
+class MyTokenObtainPairView(TokenObtainPairView):
+    # Add any additional customization here if needed
+    pass
 
 def remove_hotel(request):
     pass
 
-@csrf_exempt
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def add_hotel(request):
     if request.method == 'POST':
         # Get the currently authenticated user
         user = request.user
-        print("user: ", user)
-        # Check if the user is authenticated (optional)
-        if not user.is_authenticated:
-            return JsonResponse({'error': 'User is not authenticated.'}, status=401)
 
         # Load and parse the JSON data from the request body
         try:
@@ -34,8 +34,8 @@ def add_hotel(request):
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
 
-        # Combine the user ID with the other data you want to save
-        data['user_id'] = user.id
+        # Assign the authenticated user to the hotel data
+        data['user'] = user.id
 
         # Serialize the data and save it to the database
         serializer = HotelSerializer(data=data)
@@ -43,6 +43,8 @@ def add_hotel(request):
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
 def favorite_hotels(request):
@@ -65,9 +67,17 @@ def login_view(request):
         if serializer.is_valid():
             user = serializer.validated_data # Retrieve the authenticated user
             request.session.create()
-            login(request, user)
-            return JsonResponse({"success": True, "username": user.username})
+            if user is not None:
+                 # Generate JWT token
+                refresh = RefreshToken.for_user(user)
+                jwt_token = str(refresh.access_token)
+                print("JWT Token: ", jwt_token)
+
+                login(request, user)
+                print("login successful")
+                return JsonResponse({"success": True, "username": user.username, "jwtToken": jwt_token})
         else:
+            print("Serializer errors: ", serializer.errors)
             return JsonResponse({"success": False, "errors": serializer.errors}, status=400)
 
     return JsonResponse({"message": "Invalid request method."})

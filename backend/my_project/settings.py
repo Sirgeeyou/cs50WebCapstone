@@ -36,6 +36,7 @@ CORS_ALLOW_CREDENTIALS = True
 INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
+    'rest_framework_simplejwt',
     'my_project',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -56,6 +57,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 AUTH_USER_MODEL = 'my_project.User'
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',),
+}
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
@@ -96,7 +103,7 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.AllowAny',),
-    'DEFAULT_AUTHENTICATION_CLASSES':('rest_framework.authentication.SessionAuthentication',)
+    'DEFAULT_AUTHENTICATION_CLASSES':('rest_framework_simplejwt.authentication.JWTAuthentication',)
 }
 
 # Password validation

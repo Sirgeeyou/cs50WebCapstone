@@ -17,6 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from my_project import views
+from .views import MyTokenObtainPairView
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +29,5 @@ urlpatterns = [
     path("add_hotel/", views.add_hotel, name="add_hotel"),
     path("favorite_hotels/", views.favorite_hotels, name="favorite_hotels"),
     path("remove_hotel/", views.remove_hotel, name="remove_hotel"),
+    path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
