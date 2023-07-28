@@ -51,6 +51,7 @@ def favorite_hotels(request):
     if request.method == "POST":
         return
 
+
 @csrf_exempt
 def login_view(request):
     if request.method == "POST":
@@ -89,6 +90,9 @@ def logout_view(request):
     logout(request)
     return JsonResponse({"message": "Logout successful."})
 
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import login
+
 @csrf_exempt
 def register(request):
     if request.method == "POST":
@@ -97,23 +101,31 @@ def register(request):
         email = data.get("email")
         password = data.get("password")
         confirmPassword = data.get("confirmPassword")
-		
-        
+
         # Ensure password matches confirmation
-        password = request.POST.get("password")
-        confirmPassword = request.POST.get("confirmPassword")
         if password != confirmPassword:
-            return HttpResponse({"message": "Passwords must match."})
+            return JsonResponse({"message": "Passwords must match."})
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(username=username, email=email)
+            user = User.objects.create_user(username=username, email=email, password=password)
+            print("user: ", user)
+            print("username: ", username)
             user.save()
+
+            # Generate JWT token
+            refresh = RefreshToken.for_user(user)
+            jwt_token = str(refresh.access_token)
+
+            # Log in the user
+            login(request, user)
+
+            return JsonResponse({"message": "Registration successful.", "username": username, "jwtToken": jwt_token})
         except IntegrityError:
-            return HttpResponse({"message": "Username already taken."})
-        login(request, user)
-        return HttpResponse({"message": "Registration successful."})
+            return JsonResponse({"message": "Username already taken."})
     else:
-        return HttpResponse({"message": "Invalid request method."})
+        return JsonResponse({"message": "Invalid request method."})
+
+
     
 
