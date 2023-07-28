@@ -33,7 +33,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onGaiaIdChange }) => {
         },
         headers: {
           "X-RapidAPI-Key":
-            "85cb9d4329mshb935a0eadf15ac2p1ed939jsn2e0650e0c829",
+            "69767182d6msh042f40b5ee7a205p123080jsn78448fec9072",
           "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
         },
         cancelToken: cancelToken.token, // Set the cancel token

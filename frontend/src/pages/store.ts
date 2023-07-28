@@ -16,7 +16,10 @@ interface HotelState {
   value: HotelStateValue;
 }
 
-const initialState = { value: { username: "" }, isLogged: false };
+const initialState = {
+  value: { username: "", jwtToken: null },
+  isLogged: false,
+};
 
 const initialStateHotel: HotelState = {
   value: {
@@ -48,6 +51,7 @@ const userSlice = createSlice({
     login: (state, action) => {
       if (action.payload.success) {
         state.value.username = action.payload.username;
+        state.value.jwtToken = action.payload.jwtToken;
         state.isLogged = true;
       } else {
         state.value = initialState.value;
@@ -57,10 +61,13 @@ const userSlice = createSlice({
     logout: (state) => {
       state.value = initialState.value;
     },
+    setJwtToken: (state, action) => {
+      state.value.jwtToken = action.payload;
+    },
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, setJwtToken } = userSlice.actions;
 
 export const { addFavorites, removeFavorites } = hotelSlice.actions;
 

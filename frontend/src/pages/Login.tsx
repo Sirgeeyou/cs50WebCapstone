@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Axios from "axios";
 import { useState } from "react";
-import { login, logout } from "../pages/store";
+import { login, logout, setJwtToken } from "../pages/store";
 import {
   useDispatch,
   useSelector,
@@ -40,7 +40,15 @@ export const Login = () => {
     Axios.post("http://127.0.0.1:8000/login/", data)
       .then((res) => {
         if (res.data.success) {
-          dispatch(login({ success: true, username: res.data.username }));
+          setNewUsername(res.data.username);
+          dispatch(setJwtToken(res.data.jwtToken));
+          dispatch(
+            login({
+              success: true,
+              username: res.data.username,
+              jwtToken: res.data.jwtToken,
+            })
+          );
           localStorage.setItem("loggedInUser", JSON.stringify(res.data));
         }
       })

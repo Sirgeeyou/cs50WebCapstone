@@ -11,6 +11,7 @@ import {
   removeFavorites,
 } from "../pages/store";
 import { useDispatch } from "react-redux";
+import { HotelDetails } from "../pages/HotelDetails";
 
 interface HotelApiResponse {
   id: string;
@@ -57,7 +58,7 @@ const fetchData = async (
       star_rating_ids: "3,4,5",
     },
     headers: {
-      "X-RapidAPI-Key": "85cb9d4329mshb935a0eadf15ac2p1ed939jsn2e0650e0c829",
+      "X-RapidAPI-Key": "69767182d6msh042f40b5ee7a205p123080jsn78448fec9072",
       "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
     },
   };
@@ -127,6 +128,16 @@ export const Hotels: React.FC<HotelProps> = ({
     }
   });
 
+  const getTokenFromLocalStorage = () => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      console.log("user.jwtToken: ", user.jwtToken);
+      return user.jwtToken;
+    }
+    return null;
+  };
+
   const onSubmit = (data: HotelApiResponse) => {
     const {
       id: hotelId,
@@ -138,9 +149,19 @@ export const Hotels: React.FC<HotelProps> = ({
     console.log("DATA: ", data);
     const hotelDataToSend = { hotelId, hotelName, imgUrl };
     console.log("hotelDataToSend: ", hotelDataToSend);
-    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelDataToSend)
+
+    const jwtToken = getTokenFromLocalStorage();
+
+    const headers = {
+      Authorization: `Bearer ${jwtToken}`,
+    };
+
+    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelDataToSend, {
+      headers: headers,
+    })
       .then((res) => {
         if (res.data.success) {
+          console.log("newHotel: ", newHotel);
           dispatch(addFavorites(newHotel));
         }
       })

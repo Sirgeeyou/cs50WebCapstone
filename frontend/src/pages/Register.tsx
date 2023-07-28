@@ -2,10 +2,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { login, setJwtToken } from "./store";
+import { useDispatch } from "react-redux";
 
 export const Register = () => {
   /* the keys inside the schema have to be exactly as the ones from ...register */
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const schema = yup.object().shape({
     username: yup.string().required("Please type your username"),
     email: yup.string().email().required("Please provide a valid email"),
@@ -26,6 +31,9 @@ export const Register = () => {
     resolver: yupResolver(schema),
   });
 
+  // Add state to handle login status
+  const [loginSuccess, setLoginSuccess] = useState(false);
+
   const onSubmit = async (data: any) => {
     console.log("onSubmit called");
     try {
@@ -33,6 +41,24 @@ export const Register = () => {
       const endpoint = "http://127.0.0.1:8000/register/";
       const response = await Axios.post(endpoint, data);
       console.log("User registered: ", response.data);
+      console.log("response.data.username", response.data.username);
+      // Check if registration was successful
+      if (response.data.message === "Registration successful.") {
+        // Store the user ID in localStorage
+        localStorage.setItem("jwtToken", response.data.jwtToken);
+
+        dispatch(setJwtToken(response.data.jwtToken));
+        dispatch(
+          login({
+            success: true,
+            username: response.data.username,
+            jwtToken: response.data.jwtToken,
+          })
+        );
+        // Set login success state to true
+        setLoginSuccess(true);
+        navigate("/");
+      }
     } catch (error) {
       console.error("Registration failed: ", error);
     }
