@@ -12,7 +12,7 @@ export const Navbar = () => {
       </div>
       <div className="flex-none"></div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal px-5">
+        <ul className="menu menu-horizontal px-5 z-50">
           {isUsernameAvailable ? (
             <p className="text-xl pr-5 pt-2.5"> Hello there, {username}! </p>
           ) : (

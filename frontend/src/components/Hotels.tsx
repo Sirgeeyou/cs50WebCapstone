@@ -5,7 +5,6 @@ import { useState } from "react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { HotelStateDetails, addFavorites } from "../pages/store";
 import { useDispatch } from "react-redux";
 
 interface HotelApiResponse {
@@ -91,7 +90,7 @@ export const Hotels: React.FC<HotelProps> = ({
   );
 
   //Redux toolkit
-  const [newHotel, setNewHotel] = useState<HotelStateDetails>({
+  const [newHotel, setNewHotel] = useState<any>({
     hotelId: "",
     hotelName: "",
     imgUrl: "",
@@ -170,7 +169,6 @@ export const Hotels: React.FC<HotelProps> = ({
       .then((res) => {
         if (res.data.success) {
           console.log("newHotel: ", newHotel);
-          dispatch(addFavorites(newHotel));
         }
       })
       .catch((error) => {

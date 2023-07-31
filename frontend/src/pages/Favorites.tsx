@@ -36,9 +36,7 @@ export const Favorites = () => {
       .delete(`http://localhost:8000/remove_hotel/${intHotelId}/`, config)
       .then((response) => {
         console.log(response.data.message);
-        setFavoriteHotels((prevFavoriteHotels) =>
-          prevFavoriteHotels.filter((hotel: any) => hotel.id !== intHotelId)
-        );
+        fetchFavoriteHotels();
       })
       .catch((error) => {
         console.error("Error removing hotel from favorites: ", error);
@@ -84,7 +82,7 @@ export const Favorites = () => {
 
               {/* X icon */}
               <button
-                onClick={() => handleRemoveHotel(hotel.hotelId)}
+                onClick={() => handleRemoveHotel(String(hotel.hotelId))}
                 className="circle-icon"
               >
                 <FontAwesomeIcon icon={faTimes} />
