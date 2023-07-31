@@ -2,16 +2,11 @@ import Axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { faHeart, faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  HotelStateDetails,
-  addFavorites,
-  removeFavorites,
-} from "../pages/store";
+import { HotelStateDetails, addFavorites } from "../pages/store";
 import { useDispatch } from "react-redux";
-import { HotelDetails } from "../pages/HotelDetails";
 
 interface HotelApiResponse {
   id: string;

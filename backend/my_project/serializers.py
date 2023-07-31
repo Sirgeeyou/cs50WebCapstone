@@ -29,5 +29,5 @@ class LoginSerializer(serializers.Serializer):
 class HotelSerializer(serializers.ModelSerializer):
     class Meta:
         model= FavoriteHotel
-        fields = ['id', 'hotelName', 'imgUrl']
+        fields = ['id', 'hotelId', 'hotelName', 'imgUrl']
 

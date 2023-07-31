@@ -11,3 +11,25 @@
   margin: 0 auto; /* To center the container */
   max-width: 1200px; /* Set the maximum width for both components */
 }
+
+.circle-icon {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.relative:hover .circle-icon {
+  opacity: 1;
+}

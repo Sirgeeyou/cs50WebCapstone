@@ -28,6 +28,6 @@ urlpatterns = [
     path("register/", views.register, name="register"),
     path("add_hotel/", views.add_hotel, name="add_hotel"),
     path("favorite_hotels/", views.favorite_hotels, name="favorite_hotels"),
-    path("remove_hotel/", views.remove_hotel, name="remove_hotel"),
+    path("remove_hotel/<int:hotel_id>/", views.remove_hotel, name="remove_hotel"),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]

@@ -12,13 +12,36 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import login
+from .models import FavoriteHotel
 
 class MyTokenObtainPairView(TokenObtainPairView):
     # Add any additional customization here if needed
     pass
 
-def remove_hotel(request):
-    pass
+@api_view(['DELETE'])
+@authentication_classes([JWTAuthentication])
+def remove_hotel(request, hotel_id):
+    print("remove_hotel")
+    if request.method == 'DELETE':
+        # Get the currently authenticated user
+        user = request.user
+        print("hotel_id:", hotel_id)
+        print("user:", user)
+        # Check if the hotel exists in the user's favorites
+        try:
+            hotel = FavoriteHotel.objects.get(hotelId=hotel_id, user=user)
+            print("hotel: ", hotel)
+        except FavoriteHotel.DoesNotExist:
+            return JsonResponse({'error': 'Hotel not found in favorites.'}, status=404)
+
+        # Delete the hotel from the user's favorites
+        hotel.delete()
+
+        return JsonResponse({'message': 'Hotel removed from favorites.'}, status=200)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
 @api_view(['POST'])
@@ -53,11 +76,19 @@ def add_hotel(request):
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
-
+@api_view(['GET'])
 def favorite_hotels(request):
-    if request.method == "POST":
-        return
+    if request.method == "GET":
+        # Retrieve all favorite hotels from the database
+        hotels = FavoriteHotel.objects.all()
 
+        # Serialize the data using the FavoriteHotelSerializer
+        serializer = HotelSerializer(hotels, many=True)
+
+        # Return the serialized data as a JSON response
+        return JsonResponse(serializer.data, safe=False)
+
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 @csrf_exempt
 def login_view(request):
@@ -97,8 +128,6 @@ def logout_view(request):
     logout(request)
     return JsonResponse({"message": "Logout successful."})
 
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth import login
 
 @csrf_exempt
 def register(request):
