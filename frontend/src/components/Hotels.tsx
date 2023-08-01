@@ -5,7 +5,8 @@ import { useState } from "react";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface HotelApiResponse {
   id: string;
@@ -96,8 +97,6 @@ export const Hotels: React.FC<HotelProps> = ({
     imgUrl: "",
   });
 
-  const dispatch = useDispatch();
-
   console.log("newHotel: ", newHotel);
 
   if (!data || isLoading) {
@@ -167,8 +166,10 @@ export const Hotels: React.FC<HotelProps> = ({
       headers: headers,
     })
       .then((res) => {
-        if (res.data.success) {
-          console.log("newHotel: ", newHotel);
+        if (res.status === 201) {
+          console.log("newHotelsuccess: ", newHotel);
+
+          toast.success("Hotel added to your Favorites");
         }
       })
       .catch((error) => {
@@ -177,77 +178,97 @@ export const Hotels: React.FC<HotelProps> = ({
   };
 
   return (
-    <div className="flex flex-wrap justify-center">
-      <div className="flex flex-wrap">
-        <button onClick={handlePrice} className="btn btn-primary mt-3 mx-auto">
-          Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
-        </button>
-      </div>
+    <div className="relative">
+      <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap">
+          <button
+            onClick={handlePrice}
+            className="btn btn-primary mt-3 mx-auto"
+          >
+            Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
+          </button>
+        </div>
 
-      {sortedHotels?.map((hotel: any, key: any) => (
-        <div key={key} className="w-96 mx-2">
-          <div className="card shadow-xl mt-5">
-            <figure className="flex justify-center rounded-t-lg overflow-hidden">
-              <FontAwesomeIcon
-                icon={faHeartOutline}
-                className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
-                onClick={() => {
-                  setNewHotel(hotel);
-                  onSubmit(hotel);
-                }}
-              />
-              <img
-                src={hotel.propertyImage.image.url}
-                className="card-image rounded-t-lg w-full h-auto"
-              />
-              <div className="absolute top-1 right-1 bg-blue-500 px-2 py-1 text-white rounded-lg flex items-center space-x-1 mr-2">
-                <div
-                  className="tooltip"
-                  data-tip={`Reviews: ${hotel.reviews?.total}`}
-                >
-                  <span className="mr-1">
-                    <FontAwesomeIcon icon={faStar} />
-                  </span>
-
-                  {hotel.reviews?.score}
-                </div>
-              </div>
-            </figure>
-
-            <div className="card-body rounded-lg bg-slate-800">
-              <h2 className="card-title text-light">{hotel.name}</h2>
-              <div className="flex">
-                {hotel.offerSummary?.messages?.map((message: any, key: any) => (
+        {sortedHotels?.map((hotel: any, key: any) => (
+          <div key={key} className="w-96 mx-2">
+            <div className="card shadow-xl mt-5">
+              <figure className="flex justify-center rounded-t-lg overflow-hidden">
+                <FontAwesomeIcon
+                  icon={faHeartOutline}
+                  className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
+                  onClick={() => {
+                    setNewHotel(hotel);
+                    onSubmit(hotel);
+                  }}
+                />
+                <img
+                  src={hotel.propertyImage.image.url}
+                  className="card-image rounded-t-lg w-full h-auto"
+                />
+                <div className="absolute top-1 right-1 bg-blue-500 px-2 py-1 text-white rounded-lg flex items-center space-x-1 mr-2">
                   <div
-                    key={key}
-                    className={`badge ${
-                      key === 0
-                        ? "badge-primary"
-                        : key === 1
-                        ? "badge-secondary"
-                        : ""
-                    } flex items-center ${key === 1 ? "ml-2" : ""}`}
+                    className="tooltip"
+                    data-tip={`Reviews: ${hotel.reviews?.total}`}
                   >
-                    {message.message}
-                  </div>
-                ))}
-              </div>
+                    <span className="mr-1">
+                      <FontAwesomeIcon icon={faStar} />
+                    </span>
 
-              <div className="card-actions justify-end ">
-                <p className="text-light mt-3.5 ml-0.5 font-bold">
-                  ${hotel.price.lead.amount.toFixed(0)}/night
-                </p>
-                <button
-                  className="btn btn-primary "
-                  onClick={() => navigate(`/hotels/${hotel.id}`)}
-                >
-                  Visit now
-                </button>
+                    {hotel.reviews?.score}
+                  </div>
+                </div>
+              </figure>
+
+              <div className="card-body rounded-lg bg-slate-800">
+                <h2 className="card-title text-light">{hotel.name}</h2>
+                <div className="flex">
+                  {hotel.offerSummary?.messages?.map(
+                    (message: any, key: any) => (
+                      <div
+                        key={key}
+                        className={`badge ${
+                          key === 0
+                            ? "badge-primary"
+                            : key === 1
+                            ? "badge-secondary"
+                            : ""
+                        } flex items-center ${key === 1 ? "ml-2" : ""}`}
+                      >
+                        {message.message}
+                      </div>
+                    )
+                  )}
+                </div>
+
+                <div className="card-actions justify-end ">
+                  <p className="text-light mt-3.5 ml-0.5 font-bold">
+                    ${hotel.price.lead.amount.toFixed(0)}/night
+                  </p>
+                  <button
+                    className="btn btn-primary "
+                    onClick={() => navigate(`/hotels/${hotel.id}`)}
+                  >
+                    Visit now
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
+
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 };

@@ -6,7 +6,7 @@ const initialState = {
   isLogged: false,
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "user" /* this is the name of the slice */,
   initialState /* this is the initial state of the slice. this where we specify how this user slice will look like */,
   reducers: {
@@ -32,6 +32,8 @@ const userSlice = createSlice({
 });
 
 export const { login, logout, setJwtToken } = userSlice.actions;
+
+export type RootState = ReturnType<typeof store.getState>;
 
 export const store = configureStore({
   reducer: {

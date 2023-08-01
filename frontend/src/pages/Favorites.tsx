@@ -2,6 +2,7 @@ import axios from "axios";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 export const Favorites = () => {
   const [favoriteHotels, setFavoriteHotels] = useState([]);
@@ -37,6 +38,7 @@ export const Favorites = () => {
       .then((response) => {
         console.log(response.data.message);
         fetchFavoriteHotels();
+        toast("Hotel removed from favorites");
       })
       .catch((error) => {
         console.error("Error removing hotel from favorites: ", error);
@@ -95,6 +97,20 @@ export const Favorites = () => {
               </div>
             </div>
           ))}
+      </div>
+      <div>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
+        />
       </div>
     </div>
   );
