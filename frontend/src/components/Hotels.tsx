@@ -140,6 +140,63 @@ export const Hotels: React.FC<HotelProps> = ({
     return <div>Loading...</div>;
   }
 
+  const removeFavoriteHotel = (hotelId: string) => {
+    console.log("handleRemoveHotel called");
+    console.log("hotelId: ", hotelId);
+    const intHotelId = parseInt(hotelId);
+    console.log("intHotelId: ", intHotelId);
+
+    Axios.delete(`http://localhost:8000/remove_hotel/${intHotelId}/`, config)
+      .then((response) => {
+        console.log(response.data.message);
+        fetchFavoriteHotels();
+        toast("Hotel removed from favorites");
+      })
+      .catch((error) => {
+        console.error("Error removing hotel from favorites: ", error);
+      });
+  };
+
+  const addFavoriteHotel = (hotel: any) => {
+    // Send request to add the hotel to favorites
+    const hotelData = {
+      hotelId: hotel.id,
+      hotelName: hotel.name,
+      imgUrl: hotel.propertyImage.image.url,
+    };
+
+    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelData, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
+      },
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          // Update local state by adding the hotel to favorites
+          setFavoriteHotels((prevFavorites: any) => [
+            ...prevFavorites,
+            hotelData,
+          ]);
+          toast.success("Hotel removed from your Favorites");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const toggleFavorite = (hotel: any) => {
+    const existingFavorite = favoriteHotels.find(
+      (favoriteHotel: any) => favoriteHotel.hotelId === hotel.id
+    );
+
+    if (existingFavorite) {
+      removeFavoriteHotel(existingFavorite.hotelId);
+    } else {
+      addFavoriteHotel(hotel);
+    }
+  };
+
   const handlePrice = () => {
     setSortByPrice((prevSort) => {
       if (prevSort === "asc") return "desc";
@@ -157,57 +214,6 @@ export const Hotels: React.FC<HotelProps> = ({
       return 0;
     }
   });
-
-  const onSubmit = (data: HotelApiResponse) => {
-    const {
-      id: hotelId,
-      name: hotelName,
-      propertyImage: {
-        image: { url: imgUrl },
-      },
-    } = data;
-    console.log("DATA: ", data);
-    const hotelDataToSend = { hotelId, hotelName, imgUrl };
-    console.log("hotelDataToSend: ", hotelDataToSend);
-
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    const user_id = loggedInUser ? JSON.parse(loggedInUser)?.user_id : null;
-    console.log("user_id: ", user_id);
-    if (!user_id) {
-      console.log("User ID not found. Please make sure the user is logged in.");
-      return;
-    }
-
-    const hotelDataWithUserId = {
-      ...hotelDataToSend,
-      id: user_id,
-    };
-
-    const headers = {
-      Authorization: `Bearer ${jwtToken}`,
-    };
-    console.log("headers: ", headers);
-    console.log("hotelDataWithUserId: ", hotelDataWithUserId);
-    Axios.post("http://127.0.0.1:8000/add_hotel/", hotelDataWithUserId, {
-      headers: headers,
-    })
-      .then((res) => {
-        if (res.status === 201) {
-          console.log("newHotelsuccess: ", newHotel);
-          // Update local state with the newly added hotel
-          const updatedFavoriteHotels = [
-            ...favoriteHotels,
-            hotelDataWithUserId,
-          ];
-          setFavoriteHotels(updatedFavoriteHotels);
-
-          toast.success("Hotel added to your Favorites");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
 
   return (
     <div className="relative">
@@ -232,13 +238,12 @@ export const Hotels: React.FC<HotelProps> = ({
                   }
                   className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
                   onClick={() => {
-                    setNewHotel(hotel);
-                    onSubmit(hotel);
-                    setFavoriteHotels((prev: any) => [...prev, hotel]);
+                    toggleFavorite(hotel);
                   }}
                 />
+
                 <img
-                  src={hotel.propertyImage.image.url}
+                  src={hotel.propertyImage?.image?.url || "default-image-url"}
                   className="card-image rounded-t-lg w-full h-auto"
                 />
                 <div className="absolute top-1 right-1 bg-blue-500 px-2 py-1 text-white rounded-lg flex items-center space-x-1 mr-2">

@@ -167,7 +167,7 @@ def register(request):
 
             # Log in the user
             login(request, user)
-
+            print("login succesful")
             return JsonResponse({"message": "Registration successful.", "username": username, "jwtToken": jwt_token, "user_id": user.id})
         except IntegrityError:
             return JsonResponse({"message": "Username already taken."})
