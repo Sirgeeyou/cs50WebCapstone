@@ -194,6 +194,12 @@ export const Hotels: React.FC<HotelProps> = ({
       .then((res) => {
         if (res.status === 201) {
           console.log("newHotelsuccess: ", newHotel);
+          // Update local state with the newly added hotel
+          const updatedFavoriteHotels = [
+            ...favoriteHotels,
+            hotelDataWithUserId,
+          ];
+          setFavoriteHotels(updatedFavoriteHotels);
 
           toast.success("Hotel added to your Favorites");
         }
