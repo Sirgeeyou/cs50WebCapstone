@@ -3,35 +3,36 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { config } from "process";
 
 export const Favorites = () => {
   const [favoriteHotels, setFavoriteHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Get the JWT token from local storage
+  const getTokenFromLocalStorage = () => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      console.log("user.jwtToken: ", user.jwtToken);
+      return user.jwtToken;
+    }
+    return null;
+  };
+
+  const token = getTokenFromLocalStorage();
+  console.log("token: ", token);
+  // Include the JWT token in the request headers
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   const handleRemoveHotel = (hotelId: string) => {
     console.log("handleRemoveHotel called");
     console.log("hotelId: ", hotelId);
     const intHotelId = parseInt(hotelId);
     console.log("intHotelId: ", intHotelId);
-
-    // Get the JWT token from local storage
-    const getTokenFromLocalStorage = () => {
-      const loggedInUser = localStorage.getItem("loggedInUser");
-      if (loggedInUser) {
-        const user = JSON.parse(loggedInUser);
-        console.log("user.jwtToken: ", user.jwtToken);
-        return user.jwtToken;
-      }
-      return null;
-    };
-
-    const token = getTokenFromLocalStorage();
-    console.log("token: ", token);
-    // Include the JWT token in the request headers
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
 
     axios
       .delete(`http://localhost:8000/remove_hotel/${intHotelId}/`, config)
@@ -47,15 +48,17 @@ export const Favorites = () => {
 
   const fetchFavoriteHotels = () => {
     axios
-      .get("http://localhost:8000/favorite_hotels/")
+      .get("http://localhost:8000/favorite_hotels/", config)
       .then((response) => {
         // Handle the response data
         console.log("Favorite hotels: ", response.data);
         setFavoriteHotels(response.data);
+        setLoading(false);
       })
       .catch((error) => {
         // Handle errors
         console.error("Error fetching favorite hotels: ", error);
+        setLoading(false);
       });
   };
 
@@ -63,10 +66,11 @@ export const Favorites = () => {
     fetchFavoriteHotels();
   }, []);
 
-  console.log("Favorites hotels id: ", favoriteHotels);
-  if (favoriteHotels.length === 0) {
-    return <div>No favorites yet! Go to the hotels page and add some.</div>;
+  if (loading) {
+    return <div>Loading...</div>;
   }
+
+  console.log("Favorites hotels id: ", favoriteHotels);
 
   return (
     <div>

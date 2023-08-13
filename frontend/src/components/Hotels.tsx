@@ -2,11 +2,12 @@ import Axios, { CancelTokenSource } from "axios";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as faHeartOutline } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 interface HotelApiResponse {
   id: string;
@@ -53,7 +54,7 @@ const fetchData = async (
       star_rating_ids: "3,4,5",
     },
     headers: {
-      "X-RapidAPI-Key": "69767182d6msh042f40b5ee7a205p123080jsn78448fec9072",
+      "X-RapidAPI-Key": "4776429fafmsh65f3a3ac6bac0c7p154733jsnbfff06f893d5",
       "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
     },
   };
@@ -81,6 +82,8 @@ export const Hotels: React.FC<HotelProps> = ({
 
   const [sortByPrice, setSortByPrice] = useState<"asc" | "desc" | "">(() => "");
 
+  const [favoriteHotels, setFavoriteHotels] = useState<any>([]);
+
   const { data, isLoading, error } = useQuery(
     ["hotels", checkin_date, checkout_date, gaiaId, numAdults],
     () =>
@@ -89,15 +92,49 @@ export const Hotels: React.FC<HotelProps> = ({
         Axios.CancelToken.source()
       )
   );
+  const getTokenFromLocalStorage = () => {
+    const loggedInUser = localStorage.getItem("loggedInUser");
+    if (loggedInUser) {
+      const user = JSON.parse(loggedInUser);
+      console.log("user.jwtToken: ", user.jwtToken);
+      return user.jwtToken;
+    }
+    return null;
+  };
+  const jwtToken = getTokenFromLocalStorage();
+  const config = {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    },
+  };
 
-  //Redux toolkit
+  const fetchFavoriteHotels = () => {
+    Axios.get("http://localhost:8000/favorite_hotels/", config)
+      .then((response) => {
+        // Handle the response data
+        console.log("Favorite hotels: ", response.data);
+        setFavoriteHotels(response.data);
+      })
+      .catch((error) => {
+        // Handle errors
+        console.error("Error fetching favorite hotels: ", error);
+      });
+  };
+  useEffect(() => {
+    fetchFavoriteHotels();
+    console.log("FAVORITESSSSS HOTELSSS: ", favoriteHotels);
+  }, []);
+
   const [newHotel, setNewHotel] = useState<any>({
     hotelId: "",
     hotelName: "",
     imgUrl: "",
   });
 
-  console.log("newHotel: ", newHotel);
+  // Wait for favorite hotels to be fetched before rendering
+  if (isLoading || favoriteHotels === undefined) {
+    return <div>Loading...</div>;
+  }
 
   if (!data || isLoading) {
     return <div>Loading...</div>;
@@ -121,16 +158,6 @@ export const Hotels: React.FC<HotelProps> = ({
     }
   });
 
-  const getTokenFromLocalStorage = () => {
-    const loggedInUser = localStorage.getItem("loggedInUser");
-    if (loggedInUser) {
-      const user = JSON.parse(loggedInUser);
-      console.log("user.jwtToken: ", user.jwtToken);
-      return user.jwtToken;
-    }
-    return null;
-  };
-
   const onSubmit = (data: HotelApiResponse) => {
     const {
       id: hotelId,
@@ -143,7 +170,6 @@ export const Hotels: React.FC<HotelProps> = ({
     const hotelDataToSend = { hotelId, hotelName, imgUrl };
     console.log("hotelDataToSend: ", hotelDataToSend);
 
-    const jwtToken = getTokenFromLocalStorage();
     const loggedInUser = localStorage.getItem("loggedInUser");
     const user_id = loggedInUser ? JSON.parse(loggedInUser)?.user_id : null;
     console.log("user_id: ", user_id);
@@ -154,7 +180,7 @@ export const Hotels: React.FC<HotelProps> = ({
 
     const hotelDataWithUserId = {
       ...hotelDataToSend,
-      user_id: user_id,
+      id: user_id,
     };
 
     const headers = {
@@ -180,25 +206,29 @@ export const Hotels: React.FC<HotelProps> = ({
   return (
     <div className="relative">
       <div className="flex flex-wrap justify-center">
-        <div className="flex flex-wrap">
-          <button
-            onClick={handlePrice}
-            className="btn btn-primary mt-3 mx-auto"
-          >
-            Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
-          </button>
-        </div>
+        <button onClick={handlePrice} className="btn btn-primary mt-3 mx-auto">
+          Sort by Price {sortByPrice === "asc" ? "↑" : "↓"}
+        </button>
+      </div>
 
+      <div className="flex flex-wrap justify-center">
         {sortedHotels?.map((hotel: any, key: any) => (
           <div key={key} className="w-96 mx-2">
             <div className="card shadow-xl mt-5">
               <figure className="flex justify-center rounded-t-lg overflow-hidden">
                 <FontAwesomeIcon
-                  icon={faHeartOutline}
+                  icon={
+                    favoriteHotels.some(
+                      (favoriteHotel: any) => favoriteHotel.hotelId === hotel.id
+                    )
+                      ? faHeart
+                      : faHeartOutline
+                  }
                   className="absolute top-1 left-1 text-red-500 text-xl cursor-pointer"
                   onClick={() => {
                     setNewHotel(hotel);
                     onSubmit(hotel);
+                    setFavoriteHotels((prev: any) => [...prev, hotel]);
                   }}
                 />
                 <img

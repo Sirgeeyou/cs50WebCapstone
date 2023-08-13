@@ -44,45 +44,56 @@ def remove_hotel(request, hotel_id):
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
+
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
 def add_hotel(request):
     if request.method == 'POST':
         # Get the currently authenticated user
         user = request.user
-        
+
+        if user.is_authenticated:
+            print("User is authenticated:", user)
+        else:
+            print("User is not authenticated.")
+
         # Load and parse the JSON data from the request body
         try:
             data = json.loads(request.body)
+            print("data:", data)
         except json.JSONDecodeError:
             return JsonResponse({'error': 'Invalid JSON data.'}, status=400)
 
-        # Access the user_id from the data dictionary
-        user_id = data.get('user_id')
-
-        if not user_id:
-            return JsonResponse({'error': 'User ID not found in the request body.'}, status=400)
-
         # Assign the authenticated user to the hotel data
-        data['user'] = user_id
+        data['user'] = user.id
+        print("DATAAAA: ", data)
 
         # Serialize the data and save it to the database
         serializer = HotelSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(user=user)  # Pass the authenticated user to the serializer
+            serializer.save()
             return JsonResponse(serializer.data, status=201)
         return JsonResponse(serializer.errors, status=400)
 
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
+
+
+
+
+
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
 def favorite_hotels(request):
     if request.method == "GET":
-        # Retrieve all favorite hotels from the database
-        hotels = FavoriteHotel.objects.all()
+        # Get the currently authenticated user
+        user = request.user
 
-        # Serialize the data using the FavoriteHotelSerializer
+        # Retrieve favorite hotels for the current user from the database
+        hotels = FavoriteHotel.objects.filter(user=user)
+
+        # Serialize the data using the HotelSerializer
         serializer = HotelSerializer(hotels, many=True)
 
         # Return the serialized data as a JSON response

@@ -26,8 +26,8 @@ class LoginSerializer(serializers.Serializer):
     def create(self, validated_data):
         pass 
     
-class HotelSerializer(serializers.ModelSerializer):
+class HotelSerializer(serializers.ModelSerializer):    
     class Meta:
         model= FavoriteHotel
-        fields = ['id', 'hotelId', 'hotelName', 'imgUrl']
+        fields = ['user', 'hotelId', 'hotelName', 'imgUrl']
 

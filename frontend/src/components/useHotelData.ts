@@ -57,7 +57,7 @@ const fetchData = async (hotelId: string | undefined) => {
       hotel_id: hotelId,
     },
     headers: {
-      "X-RapidAPI-Key": "69767182d6msh042f40b5ee7a205p123080jsn78448fec9072",
+      "X-RapidAPI-Key": "4776429fafmsh65f3a3ac6bac0c7p154733jsnbfff06f893d5",
       "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
     },
   };

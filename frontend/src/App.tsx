@@ -11,13 +11,15 @@ import { Logout } from "./components/Logout";
 import { HotelsFeed } from "./pages/HotelsFeed";
 import { HotelDetails } from "./pages/HotelDetails";
 import { Favorites } from "./pages/Favorites";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from "./pages/store";
+import Auth from "./pages/Auth";
 
 function App() {
   const queryClient = new QueryClient();
   const dispatch = useDispatch();
+  const [isAuthInitialized, setIsAuthInitialized] = useState(false);
 
   // Retrieve user information from local storage during initial rendering
   useEffect(() => {
@@ -26,7 +28,12 @@ function App() {
       const user = JSON.parse(storedUser);
       dispatch(login({ success: true, username: user.username }));
     }
+    setIsAuthInitialized(true);
   }, [dispatch]);
+
+  if (!isAuthInitialized) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="App">
@@ -37,10 +44,38 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/hotels" element={<HotelsFeed />} />
-            <Route path="/hotels/:hotelId" element={<HotelDetails />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/logout" element={<Logout />} />
+            <Route
+              path="/hotels/:hotelId"
+              element={
+                <Auth>
+                  <HotelDetails />
+                </Auth>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <Auth>
+                  <Favorites />
+                </Auth>
+              }
+            />
+            <Route
+              path="/logout"
+              element={
+                <Auth>
+                  <Logout />
+                </Auth>
+              }
+            />
+            <Route
+              path="/hotels"
+              element={
+                <Auth>
+                  <HotelsFeed />
+                </Auth>
+              }
+            />
           </Routes>
         </Router>
       </QueryClientProvider>

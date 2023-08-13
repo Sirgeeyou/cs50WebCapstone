@@ -1,4 +1,5 @@
 import heropicture from "../static/heropicture.jpg";
+import { Link } from "react-router-dom";
 
 const image = new Image();
 image.src = heropicture;
@@ -11,11 +12,16 @@ export const HeroSection = () => {
         <div>
           <h1 className="text-5xl font-bold">Hello there!</h1>
           <p className="py-6">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
+            Indulge your wanderlust by virtually touring remarkable hotels
+            worldwide. Experience opulent suites, stunning views, and lavish
+            amenities online. Imagine sipping cocktails by the pool or unwinding
+            in serene spas. Whether planning a getaway or seeking inspiration,
+            explore elegance and hospitality at its finest on our website. Your
+            dream stay is a click away.
           </p>
-          <button className="btn btn-primary">Get Started</button>
+          <Link to="/hotels">
+            <button className="btn btn-primary">Get Started!</button>
+          </Link>
         </div>
       </div>
     </div>

@@ -5,12 +5,15 @@ import { useSelector } from "react-redux";
 export const Navbar = () => {
   const username = useSelector((state: any) => state.user.value.username);
   const isUsernameAvailable = Boolean(username);
-
+  console.log("Navbar username: ", username);
   const renderAuthLinks = () => {
     if (isUsernameAvailable) {
       // User is logged in, show favorites and logout links
       return (
         <>
+          <li className="text-xl">
+            <Link to="/hotels"> Explore </Link>
+          </li>
           <li className="text-xl">
             <Link to="/favorites"> Favorites </Link>
           </li>
@@ -39,7 +42,9 @@ export const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-2xl">daisyUI</a>
+        <a className="btn btn-ghost normal-case text-2xl">
+          <Link to="/"> TravelSome </Link>
+        </a>
       </div>
       <div className="flex-none"></div>
       <div className="flex-none">

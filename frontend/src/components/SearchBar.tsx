@@ -33,7 +33,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onGaiaIdChange }) => {
         },
         headers: {
           "X-RapidAPI-Key":
-            "69767182d6msh042f40b5ee7a205p123080jsn78448fec9072",
+            "4776429fafmsh65f3a3ac6bac0c7p154733jsnbfff06f893d5",
           "X-RapidAPI-Host": "hotels-com-provider.p.rapidapi.com",
         },
         cancelToken: cancelToken.token, // Set the cancel token
@@ -65,7 +65,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({ onGaiaIdChange }) => {
     }
 
     return () => {
-      source.cancel("Component unmounted"); // Cancel the request on cleanup
+      if (source) {
+        source.cancel("Component unmounted"); // Cancel the request if it's still pending
+      }
     };
   }, [country, onGaiaIdChange]);
 

@@ -56,7 +56,7 @@ export const Login = () => {
       .catch((error) => {
         console.log(error);
       });
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   console.log(errors);
