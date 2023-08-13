@@ -13,7 +13,11 @@ export const HotelDetails: React.FC = () => {
   const { data, isLoading, error } = useHotelData(hotelId);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   if (error) {

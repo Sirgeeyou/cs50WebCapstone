@@ -67,7 +67,11 @@ export const Favorites = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   console.log("Favorites hotels id: ", favoriteHotels);

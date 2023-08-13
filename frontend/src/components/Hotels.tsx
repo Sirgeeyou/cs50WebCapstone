@@ -133,11 +133,19 @@ export const Hotels: React.FC<HotelProps> = ({
 
   // Wait for favorite hotels to be fetched before rendering
   if (isLoading || favoriteHotels === undefined) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   if (!data || isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <span className="loading loading-ring loading-lg"></span>
+      </div>
+    );
   }
 
   const removeFavoriteHotel = (hotelId: string) => {
