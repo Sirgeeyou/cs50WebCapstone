@@ -185,7 +185,7 @@ export const Hotels: React.FC<HotelProps> = ({
             ...prevFavorites,
             hotelData,
           ]);
-          toast.success("Hotel removed from your Favorites");
+          toast.success("Hotel added to your Favorites");
         }
       })
       .catch((error) => {
