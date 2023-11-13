@@ -12,17 +12,15 @@
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/static/(.*)",
-      "dest": "/frontend/static/$1"
+      "source": "/static/(.*)",
+      "destination": "/frontend/static/$1"
     },
     {
-      "src": "/(.*)",
-      "dest": "/backend/my_project/wsgi.py"
-    }
-  ],
-  "rewrites": [
+      "source": "/(.*)",
+      "destination": "/backend/my_project/wsgi.py"
+    },
     {
       "source": "/(.*)",
       "destination": "/"
