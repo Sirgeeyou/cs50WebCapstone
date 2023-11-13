@@ -9,7 +9,7 @@
     {
       "src": "backend/my_project/wsgi.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+      "config": { "runtime": "python3.9" }
     }
   ],
   "rewrites": [
@@ -24,13 +24,6 @@
     {
       "source": "/(.*)",
       "destination": "/"
-    },
-    {
-      "functions": {
-        "api/**": {
-          "excludeFiles": "{.next,*.cache,node_modules,public,app}/**"
-        }
-      }
     }
   ]
 }
