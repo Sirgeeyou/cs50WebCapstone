@@ -12,7 +12,7 @@ import { HotelsFeed } from "./pages/HotelsFeed";
 import { HotelDetails } from "./pages/HotelDetails";
 import { Favorites } from "./pages/Favorites";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login } from "./pages/store";
 import Auth from "./pages/Auth";
 
