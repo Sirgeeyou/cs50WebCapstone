@@ -70,3 +70,97 @@ The frontend has been build using React and Typescript. The _frontend_ folder in
 ## Running the application
 
 In order to properly run the application, you need to change directory inside the backend folder and run `python manage.py runserver`. To run the frontend you need to open a different terminal and change directory inside the frontend folder and run `npm start`.
+
+```
+capstone
+├─ backend
+│  ├─ build_files.sh
+│  ├─ db.sqlite3
+│  ├─ manage.py
+│  ├─ my_project
+│  │  ├─ admin.py
+│  │  ├─ asgi.py
+│  │  ├─ migrations
+│  │  │  ├─ 0001_initial.py
+│  │  │  ├─ 0002_delete_customer.py
+│  │  │  ├─ 0003_favoritehotel.py
+│  │  │  ├─ 0004_rename_hotel_id_favoritehotel_hotelid_and_more.py
+│  │  │  ├─ 0005_alter_favoritehotel_user.py
+│  │  │  ├─ 0006_alter_favoritehotel_user.py
+│  │  │  ├─ __init__.py
+│  │  │  └─ __pycache__
+│  │  │     ├─ 0001_initial.cpython-311.pyc
+│  │  │     ├─ 0002_abstract.cpython-311.pyc
+│  │  │     ├─ 0002_delete_customer.cpython-311.pyc
+│  │  │     ├─ 0003_favoritehotel.cpython-311.pyc
+│  │  │     ├─ 0003_rename_abstract_abstractuser.cpython-311.pyc
+│  │  │     ├─ 0004_rename_hotel_id_favoritehotel_hotelid_and_more.cpython-311.pyc
+│  │  │     ├─ 0004_user_delete_abstractuser.cpython-311.pyc
+│  │  │     ├─ 0005_alter_favoritehotel_user.cpython-311.pyc
+│  │  │     ├─ 0005_rename_user_customuser.cpython-311.pyc
+│  │  │     ├─ 0006_alter_favoritehotel_user.cpython-311.pyc
+│  │  │     └─ __init__.cpython-311.pyc
+│  │  ├─ models.py
+│  │  ├─ serializers.py
+│  │  ├─ settings.py
+│  │  ├─ urls.py
+│  │  ├─ views.py
+│  │  ├─ wsgi.py
+│  │  ├─ __init__.py
+│  │  └─ __pycache__
+│  │     ├─ admin.cpython-311.pyc
+│  │     ├─ models.cpython-311.pyc
+│  │     ├─ serializers.cpython-311.pyc
+│  │     ├─ settings.cpython-311.pyc
+│  │     ├─ urls.cpython-311.pyc
+│  │     ├─ validations.cpython-311.pyc
+│  │     ├─ views.cpython-311.pyc
+│  │     ├─ wsgi.cpython-311.pyc
+│  │     └─ __init__.cpython-311.pyc
+│  ├─ README.md
+│  ├─ requirements.txt
+│  └─ vercel.json
+├─ frontend
+│  ├─ package-lock.json
+│  ├─ package.json
+│  ├─ public
+│  │  ├─ favicon.ico
+│  │  ├─ index.html
+│  │  ├─ manifest.json
+│  │  └─ robots.txt
+│  ├─ README.md
+│  ├─ src
+│  │  ├─ App.css
+│  │  ├─ App.tsx
+│  │  ├─ components
+│  │  │  ├─ Adults.tsx
+│  │  │  ├─ Amenities.tsx
+│  │  │  ├─ HeroSection.tsx
+│  │  │  ├─ HotelHeader.tsx
+│  │  │  ├─ Hotels.tsx
+│  │  │  ├─ Images.tsx
+│  │  │  ├─ Logout.tsx
+│  │  │  ├─ Map.tsx
+│  │  │  ├─ Modal.tsx
+│  │  │  ├─ Navbar.tsx
+│  │  │  ├─ SearchBar.tsx
+│  │  │  ├─ useHotelData.ts
+│  │  │  └─ userInput.tsx
+│  │  ├─ index.tsx
+│  │  ├─ pages
+│  │  │  ├─ Auth.jsx
+│  │  │  ├─ Favorites.tsx
+│  │  │  ├─ Home.tsx
+│  │  │  ├─ HotelDetails.tsx
+│  │  │  ├─ HotelsFeed.tsx
+│  │  │  ├─ Login.tsx
+│  │  │  ├─ Register.tsx
+│  │  │  └─ store.ts
+│  │  ├─ react-app-env.d.ts
+│  │  └─ static
+│  │     └─ heropicture.jpg
+│  ├─ tailwind.config.js
+│  └─ tsconfig.json
+└─ README.md
+
+```
