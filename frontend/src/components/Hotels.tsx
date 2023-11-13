@@ -9,15 +9,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 
-interface HotelApiResponse {
-  id: string;
-  name: string;
-  propertyImage: {
-    image: {
-      url: string;
-    };
-  };
-}
 export interface HotelProps {
   checkin_date: string | null;
   checkout_date: string | null;
@@ -77,14 +68,13 @@ export const Hotels: React.FC<HotelProps> = ({
   numAdults,
 }) => {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   console.log("HotelsFeed: ", checkin_date, checkout_date);
 
   const [sortByPrice, setSortByPrice] = useState<"asc" | "desc" | "">(() => "");
 
   const [favoriteHotels, setFavoriteHotels] = useState<any>([]);
 
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading } = useQuery(
     ["hotels", checkin_date, checkout_date, gaiaId, numAdults],
     () =>
       fetchData(
@@ -123,13 +113,7 @@ export const Hotels: React.FC<HotelProps> = ({
   useEffect(() => {
     fetchFavoriteHotels();
     console.log("FAVORITESSSSS HOTELSSS: ", favoriteHotels);
-  }, []);
-
-  const [newHotel, setNewHotel] = useState<any>({
-    hotelId: "",
-    hotelName: "",
-    imgUrl: "",
-  });
+  }, [fetchFavoriteHotels, favoriteHotels]);
 
   // Wait for favorite hotels to be fetched before rendering
   if (isLoading || favoriteHotels === undefined) {
