@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path
 from my_project import views
 from .views import MyTokenObtainPairView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -31,3 +33,6 @@ urlpatterns = [
     path("remove_hotel/<int:hotel_id>/", views.remove_hotel, name="remove_hotel"),
     path('token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)

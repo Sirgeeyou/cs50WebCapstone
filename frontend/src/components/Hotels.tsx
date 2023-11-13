@@ -253,6 +253,7 @@ export const Hotels: React.FC<HotelProps> = ({
                 <img
                   src={hotel.propertyImage?.image?.url || "default-image-url"}
                   className="card-image rounded-t-lg w-full h-auto"
+                  alt={hotel.propertyImage?.image?.url}
                 />
                 <div className="absolute top-1 right-1 bg-blue-500 px-2 py-1 text-white rounded-lg flex items-center space-x-1 mr-2">
                   <div
@@ -270,18 +271,18 @@ export const Hotels: React.FC<HotelProps> = ({
 
               <div className="card-body rounded-lg bg-slate-800">
                 <h2 className="card-title text-light">{hotel.name}</h2>
-                <div className="flex">
+                <div className="flex gap-1">
                   {hotel.offerSummary?.messages?.map(
                     (message: any, key: any) => (
                       <div
                         key={key}
-                        className={`badge ${
+                        className={`badge flex items-center ${
                           key === 0
                             ? "badge-primary"
                             : key === 1
                             ? "badge-secondary"
                             : ""
-                        } flex items-center ${key === 1 ? "ml-2" : ""}`}
+                        }  ${key === 1 ? "" : ""}`}
                       >
                         {message.message}
                       </div>

@@ -18,7 +18,8 @@ interface LoginForm {
 export const Login = () => {
   const navigate = useNavigate();
 
-  const [newUsername, setNewUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("Test User");
+  const [autopassword, setAutopassword] = useState("asdasd");
 
   const dispatch = useDispatch();
   const username = useSelector((state: any) => state.user.value.username);
@@ -72,6 +73,7 @@ export const Login = () => {
           onChange={(e) => {
             setNewUsername(e.target.value);
           }}
+          value={newUsername}
         />
         <p>{errors.username?.message}</p>
         <input
@@ -79,6 +81,7 @@ export const Login = () => {
           placeholder="Password"
           className="input w-full max-w-xs bg-sky-950 mt-2"
           {...register("password")}
+          value={autopassword}
         />
         <p>{errors.password?.message}</p>
         <button className="btn mt-2  bg-sky-950">Submit</button>
