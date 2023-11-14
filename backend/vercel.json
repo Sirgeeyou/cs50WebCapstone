@@ -15,7 +15,7 @@
   "rewrites": [
     {
       "source": "/static/(.*)",
-      "destination": "/frontend/$1"
+      "destination": "/frontend/static/$1"
     },
     {
       "source": "/(.*)",
